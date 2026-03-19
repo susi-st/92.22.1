@@ -24,7 +24,6 @@
         .btn-hover:hover { transform: translateY(-2px); filter: brightness(0.95); }
         .btn-hover:active { transform: translateY(0); }
 
-        /* 防止拖曳或選取文字 */
         .no-select { user-select: none; }
     </style>
 </head>
@@ -59,35 +58,20 @@
 
     <!-- App Container -->
     <div id="app" class="max-w-4xl mx-auto w-full flex-grow flex flex-col opacity-20 pointer-events-none transition-opacity duration-500">
-        
-        <!-- Header: Title & Progress -->
         <header class="bg-white rounded-3xl shadow-sm p-6 mb-6">
             <h1 id="main-title" class="text-2xl md:text-3xl font-bold text-pink-500 mb-6 text-center leading-tight">
                 2-2 無線網路技術
             </h1>
-            
-            <div id="progress-container" class="flex justify-center items-center gap-3 overflow-x-auto py-2">
-                <!-- Progress dots will be injected here -->
-            </div>
+            <div id="progress-container" class="flex justify-center items-center gap-3 overflow-x-auto py-2"></div>
         </header>
 
-        <!-- Main Content Section -->
         <main id="quiz-content" class="bg-white rounded-[2.5rem] shadow-md p-8 flex-grow flex flex-col relative overflow-hidden">
-            <!-- Question area -->
             <div id="question-area" class="flex-grow">
-                <div id="question-text" class="text-xl font-medium text-gray-700 mb-2 leading-relaxed">
-                    <!-- Question text injected here -->
-                </div>
-                <div id="question-hint" class="text-sm text-pink-400 mb-8 font-medium h-6">
-                    <!-- Multiple choice hint injected here -->
-                </div>
-                
-                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Options injected here -->
-                </div>
+                <div id="question-text" class="text-xl font-medium text-gray-700 mb-2 leading-relaxed"></div>
+                <div id="question-hint" class="text-sm text-pink-400 mb-8 font-medium h-6"></div>
+                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
-            <!-- Footer Controls -->
             <div class="mt-8 flex justify-between items-center border-t border-gray-100 pt-6">
                 <div class="text-gray-400 text-sm">
                     試題編號：<span id="question-index-display">1</span> / <span id="total-questions-display">12</span>
@@ -98,7 +82,6 @@
             </div>
         </main>
 
-        <!-- Result Page (Hidden initially) -->
         <section id="result-page" class="hidden bg-white rounded-[2.5rem] shadow-md p-8 flex-grow flex flex-col items-center text-center">
             <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mb-6">
                 <svg class="w-12 h-12 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -112,14 +95,12 @@
                     <p id="total-time" class="text-2xl font-bold text-gray-700">00:00</p>
                 </div>
                 <div class="bg-blue-50 p-4 rounded-3xl">
-                    <p class="text-xs text-gray-500 mb-1">本次挑戰次數</p>
+                    <p class="text-xs text-gray-500 mb-1">總作答次數</p>
                     <p id="total-attempts" class="text-2xl font-bold text-gray-700">1</p>
                 </div>
             </div>
 
-            <div id="quote-area" class="bg-gray-50 p-6 rounded-3xl italic text-gray-600 mb-8 max-w-xl">
-                <!-- Quote injected here -->
-            </div>
+            <div id="quote-area" class="bg-gray-50 p-6 rounded-3xl italic text-gray-600 mb-8 max-w-xl"></div>
 
             <div class="flex flex-col gap-3 w-full max-w-xs">
                 <button onclick="location.reload()" class="w-full py-3 rounded-2xl bg-pink-400 text-white font-bold btn-hover">重新挑戰</button>
@@ -137,151 +118,29 @@
         </div>
     </div>
 
-    <!-- Success Feedback Overlay -->
     <div id="success-overlay" class="fixed inset-0 pointer-events-none flex items-center justify-center z-40 opacity-0 transition-opacity duration-300">
-        <div class="bg-green-400 text-white px-8 py-4 rounded-full shadow-lg font-bold text-2xl">
-            正確！ 🎉
-        </div>
+        <div class="bg-green-400 text-white px-8 py-4 rounded-full shadow-lg font-bold text-2xl">正確！ 🎉</div>
     </div>
 
     <script>
-        // 1. 初始化資料與配置
         const GAS_URL = "https://script.google.com/macros/s/AKfycbx0RO7ZnVfRQBiGkeY6ii7f8Yh7mI8A099m-XNTSffC-t4v8LEsOu2jBe0QCdopCdkpFw/exec";
         
         const quizData = [
-            {
-                id: 1,
-                question: "無線網路主要是利用何者作為網路訊號的傳輸媒介？",
-                options: ["電磁波", "紅外線", "聲波", "電流"],
-                answer: ["電磁波"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 2,
-                question: "關於無線網路電磁波的「頻率」、「傳輸速度」、「受障礙物影響」與「傳輸距離」之間的關係，下列敘述何者正確？",
-                options: [
-                    "頻率越高，傳輸速度越快、越易受障礙物影響、傳輸距離越短",
-                    "頻率越高，傳輸速度越慢、越容易穿透障礙物、傳輸距離越長",
-                    "頻率越低，傳輸速度越快、越容易穿透障礙物、傳輸距離越短",
-                    "頻率越低，傳輸速度越慢、越易受障礙物影響、傳輸距離越長"
-                ],
-                answer: ["頻率越高，傳輸速度越快、越易受障礙物影響、傳輸距離越短"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 3,
-                question: "(複選題) 下列哪三種技術屬於「無線網路」傳輸方式？",
-                options: ["Bluetooth", "Wi-Fi", "行動網路", "光纖", "乙太網路", "ADSL", "藍芽"],
-                answer: ["Bluetooth", "Wi-Fi", "行動網路"], 
-                type: "multiple",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 4,
-                question: "關於常見無線網路技術的「傳輸距離」，由大到小排序何者正確？",
-                options: ["行動網路 > Wi-Fi > 藍牙", "行動網路 > 藍牙 > Wi-Fi", "Wi-Fi > 行動網路 > 藍牙", "藍牙 > Wi-Fi > 行動網路"],
-                answer: ["行動網路 > Wi-Fi > 藍牙"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 5,
-                question: "下列哪一種無線網路技術，因為其傳輸距離短且主要用於個人裝置間的連接，又被稱為「無線個人網路」（WPAN）？",
-                options: ["藍牙", "Wi-Fi", "行動網路", "衛星網路"],
-                answer: ["藍牙"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 6,
-                question: "下列哪一種無線網路技術，其傳輸範圍通常涵蓋一棟建築物或校園內，因此又被稱為「無線區域網路」（WLAN）？",
-                options: ["Wi-Fi", "藍牙", "行動網路", "近場通訊 (NFC)"],
-                answer: ["Wi-Fi"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 7,
-                question: "下列哪一種無線網路技術，其訊號涵蓋範圍最廣（如城市或國家），因此又被稱為「無線廣域網路」（WWAN）？",
-                options: ["行動網路", "Wi-Fi", "藍牙", "紅外線"],
-                answer: ["行動網路"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 8,
-                question: "下列哪一種無線網路技術在第一次使用時，通常必須先經過「配對」程序，兩台裝置才能建立連線並傳輸資料？",
-                options: ["Bluetooth", "Wi-Fi", "行動網路", "ADSL"],
-                answer: ["Bluetooth"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 9,
-                question: "關於無線網路設備新、舊版本（例如 Wi-Fi 6 與 Wi-Fi 4）混合搭配使用時，其「相容性」與「傳輸速度」的敘述何者正確？",
-                options: [
-                    "新版本可支援舊版本（向下相容），但傳輸速度會受限於舊版本的上限",
-                    "新版本可支援舊版本（向下相容），且傳輸速度會自動提升至新版本的規格",
-                    "舊版本可以支援新版本(向上相容)，且傳輸速度會自動提升至新版本的規格",
-                    "舊版本可以支援新版本(向上相容)，但傳輸速度會受限於舊版本的上限"
-                ],
-                answer: ["新版本可支援舊版本（向下相容），但傳輸速度會受限於舊版本的上限"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 10,
-                question: "關於無線基地臺（無線分享器）上的「天線」，下列哪一項描述是正確的觀念？",
-                options: [
-                    "不能單純從天線數量多寡，來判斷傳輸範圍或速度",
-                    "天線數量愈多，代表網路下載速度一定越快",
-                    "天線長度愈長，代表無線訊號的穿透力越強",
-                    "為了讓訊號最強，所有天線都應該指向同一個方向"
-                ],
-                answer: ["不能單純從天線數量多寡，來判斷傳輸範圍或速度"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 11,
-                question: "生活中常聽到的「5G 行動網路」或「4G 吃到飽」，其中的「G」代表的是什麼意思？",
-                options: ["世代 (Generation)", "傳輸速度單位 (Gbps)", "記憶體容量 (GB)", "頻率單位 (GHz)"],
-                answer: ["世代 (Generation)"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            },
-            {
-                id: 12,
-                question: "5G 行動網路具有「高速度、低延遲、多連結」等特性。請問在跨年晚會或大型演唱會現場，因為同時有大量使用者上網導致網路難以連上的問題，主要是靠 5G 的哪一項特性來有效解決？",
-                options: ["多連結", "高速度", "低延遲", "高穿透"],
-                answer: ["多連結"],
-                type: "single",
-                shuffleOnWrong: true,
-                randomOrder: true
-            }
+            { id: 1, question: "無線網路主要是利用何者作為網路訊號的傳輸媒介？", options: ["電磁波", "紅外線", "聲波", "電流"], answer: ["電磁波"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 2, question: "關於無線網路電磁波的「頻率」、「傳輸速度」、「受障礙物影響」與「傳輸距離」之間的關係，下列敘述何者正確？", options: ["頻率越高，傳輸速度越快、越易受障礙物影響、傳輸距離越短", "頻率越高，傳輸速度越慢、越容易穿透障礙物、傳輸距離越長", "頻率越低，傳輸速度越快、越容易穿透障礙物、傳輸距離越短", "頻率越低，傳輸速度越慢、越易受障礙物影響、傳輸距離越長"], answer: ["頻率越高，傳輸速度越快、越易受障礙物影響、傳輸距離越短"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 3, question: "(複選題) 下列哪三種技術屬於「無線網路」傳輸方式？", options: ["Bluetooth", "Wi-Fi", "行動網路", "光纖", "乙太網路", "ADSL", "藍芽"], answer: ["Bluetooth", "Wi-Fi", "行動網路"], type: "multiple", shuffleOnWrong: true, randomOrder: true },
+            { id: 4, question: "關於常見無線網路技術的「傳輸距離」，由大到小排序何者正確？", options: ["行動網路 > Wi-Fi > 藍牙", "行動網路 > 藍牙 > Wi-Fi", "Wi-Fi > 行動網路 > 藍牙", "藍牙 > Wi-Fi > 行動網路"], answer: ["行動網路 > Wi-Fi > 藍牙"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 5, question: "下列哪一種無線網路技術，因為其傳輸距離短且主要用於個人裝置間的連接，又被稱為「無線個人網路」（WPAN）？", options: ["藍牙", "Wi-Fi", "行動網路", "衛星網路"], answer: ["藍牙"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 6, question: "下列哪一種無線網路技術，其傳輸範圍通常涵蓋一棟建築物或校園內，因此又被稱為「無線區域網路」（WLAN）？", options: ["Wi-Fi", "藍牙", "行動網路", "近場通訊 (NFC)"], answer: ["Wi-Fi"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 7, question: "下列哪一種無線網路技術，其訊號涵蓋範圍最廣（如城市或國家），因此又被稱為「無線廣域網路」（WWAN）？", options: ["行動網路", "Wi-Fi", "藍牙", "紅外線"], answer: ["行動網路"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 8, question: "下列哪一種無線網路技術在第一次使用時，通常必須先經過「配對」程序，兩台裝置才能建立連線並傳輸資料？", options: ["Bluetooth", "Wi-Fi", "行動網路", "ADSL"], answer: ["Bluetooth"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 9, question: "關於無線網路設備新、舊版本（例如 Wi-Fi 6 與 Wi-Fi 4）混合搭配使用時，其「相容性」與「傳輸速度」的敘述何者正確？", options: ["新版本可支援舊版本（向下相容），但傳輸速度會受限於舊版本的上限", "新版本可支援舊版本（向下相容），且傳輸速度會自動提升至新版本的規格", "舊版本可以支援新版本(向上相容)，且傳輸速度會自動提升至新版本的規格", "舊版本可以支援新版本(向上相容)，但傳輸速度會受限於舊版本的上限"], answer: ["新版本可支援舊版本（向下相容），但傳輸速度會受限於舊版本的上限"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 10, question: "關於無線基地臺（無線分享器）上的「天線」，下列哪一項描述是正確的觀念？", options: ["不能單純從天線數量多寡，來判斷傳輸範圍或速度", "天線數量愈多，代表網路下載速度一定越快", "天線長度愈長，代表無線訊號的穿透力愈強", "為了讓訊號最強，所有天線都應該指向同一個方向"], answer: ["不能單純從天線數量多寡，來判斷傳輸範圍或速度"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 11, question: "生活中常聽到的「5G 行動網路」或「4G 吃到飽」，其中的「G」代表的是什麼意思？", options: ["世代 (Generation)", "傳輸速度單位 (Gbps)", "記憶體容量 (GB)", "頻率單位 (GHz)"], answer: ["世代 (Generation)"], type: "single", shuffleOnWrong: true, randomOrder: true },
+            { id: 12, question: "5G 行動網路具有「高速度、低延遲、多連結」等特性。請問在跨年晚會或大型演唱會現場，因為同時有大量使用者上網導致網路難以連上的問題，主要是靠 5G 的哪一項特性來有效解決？", options: ["多連結", "高速度", "低延遲", "高穿透"], answer: ["多連結"], type: "single", shuffleOnWrong: true, randomOrder: true }
         ];
 
-        const quotes = [
-            "無線網路縮短了空間的距離，讓資訊無所不在。",
-            "掌握頻率的特性，就能掌握訊號傳輸的奧秘。",
-            "Bluetooth 是個人裝置間的隱形橋樑。",
-            "Wi-Fi 讓建築物內的每個角落都充滿可能性。",
-            "5G 不斷進化，開啟萬物聯網的新時代。",
-            "向下相容確保了技術交替時的平穩過度。"
-        ];
+        const quotes = ["無線網路縮短了空間的距離，讓資訊無所不在。", "掌握頻率的特性，就能掌握訊號傳輸的奧秘。", "Bluetooth 是個人裝置間的隱形橋樑。", "Wi-Fi 讓建築物內的每個角落都充滿可能性。", "5G 不斷進化，開啟萬物聯網的新時代。", "向下相容確保了技術交替時的平穩過度。"];
 
         let currentIndex = 0;
         let passedQuestions = new Set();
@@ -312,9 +171,8 @@
             container.innerHTML = '';
             quizData.forEach((_, idx) => {
                 const dot = document.createElement('div');
-                dot.className = `progress-dot flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold transition-all`;
+                dot.className = `progress-dot flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold cursor-pointer transition-all`;
                 dot.innerText = idx + 1;
-                
                 if (passedQuestions.has(idx)) {
                     dot.classList.add('passed');
                     dot.innerHTML = '✓';
@@ -332,17 +190,13 @@
             document.getElementById('question-index-display').innerText = currentIndex + 1;
             document.getElementById('total-questions-display').innerText = quizData.length;
             document.getElementById('question-text').innerText = q.question;
-            
             const hint = document.getElementById('question-hint');
             hint.innerText = q.type === 'multiple' ? "提示：此題為複選題，請選出所有正確選項" : "";
-
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
-
             let options = [...q.options];
             if (q.randomOrder) options = shuffleArray(options);
             const displayColors = shuffleArray([...colors]);
-
             options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = `p-5 rounded-3xl text-left font-medium text-gray-700 shadow-sm border-2 border-transparent transition-all btn-hover ${displayColors[idx % colors.length]}`;
@@ -350,7 +204,6 @@
                 btn.onclick = () => selectOption(btn, q.type);
                 grid.appendChild(btn);
             });
-
             renderProgress();
         }
 
@@ -376,27 +229,19 @@
         async function checkAnswer() {
             const q = quizData[currentIndex];
             const selectedBtns = Array.from(document.querySelectorAll('#options-grid button[data-selected="true"]'));
-            
             if (selectedBtns.length === 0) {
                 showModal("請選一個答案再檢查唷！");
                 return;
             }
-
             const selectedValues = selectedBtns.map(b => b.innerText).sort();
             const correctValues = [...q.answer].sort();
-
-            const isCorrect = selectedValues.length === correctValues.length && 
-                              selectedValues.every((v, i) => v === correctValues[i]);
-            
+            const isCorrect = selectedValues.length === correctValues.length && selectedValues.every((v, i) => v === correctValues[i]);
             currentAttempts[currentIndex]++;
-
             if (isCorrect) {
                 passedQuestions.add(currentIndex);
                 isChecked = true;
-                
                 const overlay = document.getElementById('success-overlay');
                 overlay.classList.replace('opacity-0', 'opacity-100');
-                
                 setTimeout(() => {
                     overlay.classList.replace('opacity-100', 'opacity-0');
                     if (currentIndex < quizData.length - 1) {
@@ -426,27 +271,27 @@
             const timeTakenSec = Math.floor((endTime - startTime) / 1000);
             const mm = String(Math.floor(timeTakenSec / 60)).padStart(2, '0');
             const ss = String(timeTakenSec % 60).padStart(2, '0');
-
+            const totalAttemptsCount = currentAttempts.reduce((a, b) => a + b, 0);
             document.getElementById('quiz-content').classList.add('hidden');
             document.getElementById('result-page').classList.remove('hidden');
             document.getElementById('student-id-display').innerText = studentId;
             document.getElementById('total-time').innerText = `${mm}:${ss}`;
-            document.getElementById('total-attempts').innerText = currentAttempts.reduce((a, b) => a + b, 0);
+            document.getElementById('total-attempts').innerText = totalAttemptsCount;
             document.getElementById('quote-area').innerText = quotes[Math.floor(Math.random() * quotes.length)];
-
-            syncToGAS(timeTakenSec);
+            syncToGAS(timeTakenSec, totalAttemptsCount);
         }
 
-        async function syncToGAS(timeTaken) {
+        async function syncToGAS(timeTaken, totalAttemptsCount) {
             const status = document.getElementById('sync-status');
             const data = {
                 id: studentId,
                 date: new Date().toLocaleString('zh-TW'),
+                chapter: "2-2",
+                challenges: totalAttemptsCount,
                 duration: timeTaken,
                 attemptsDetail: currentAttempts.join(', '),
                 totalScore: passedQuestions.size
             };
-
             try {
                 await fetch(GAS_URL, {
                     method: 'POST',
@@ -464,36 +309,24 @@
             const classInput = document.getElementById('input-class');
             const seatInput = document.getElementById('input-seat');
             const errorHint = document.getElementById('auth-error');
-
             const cls = parseInt(classInput.value);
             const seat = parseInt(seatInput.value);
-
             if (isNaN(cls) || isNaN(seat) || cls < 901 || cls > 910 || seat < 1 || seat > 38) {
                 errorHint.classList.remove('hidden');
                 return;
             }
-
             studentId = `${cls}-${seat}`;
             startTime = Date.now();
-
             document.getElementById('auth-modal').classList.add('hidden');
             const app = document.getElementById('app');
             app.classList.remove('opacity-20', 'pointer-events-none');
-            
             renderQuestion();
         }
 
         document.getElementById('start-quiz-btn').onclick = initQuiz;
-        document.getElementById('modal-close').onclick = () => {
-            document.getElementById('modal-overlay').classList.add('hidden');
-        };
+        document.getElementById('modal-close').onclick = () => { document.getElementById('modal-overlay').classList.add('hidden'); };
         document.getElementById('check-btn').onclick = checkAnswer;
-
-        window.onkeydown = (e) => {
-            if (e.key === 'Enter' && !document.getElementById('auth-modal').classList.contains('hidden')) {
-                initQuiz();
-            }
-        }
+        window.onkeydown = (e) => { if (e.key === 'Enter' && !document.getElementById('auth-modal').classList.contains('hidden')) { initQuiz(); } }
     </script>
 </body>
 </html>
